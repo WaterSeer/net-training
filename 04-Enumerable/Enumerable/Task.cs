@@ -68,9 +68,7 @@ namespace EnumerableTask {
         ///   { 1, 2, 3, 4, 5 } => { 1, 4, 9, 16, 25 }
         ///   { -1, -2, -3, -4, -5 } => { 1, 4, 9, 16, 25 }
         /// </example>
-        public IEnumerable<long> GetSquareSequence(IEnumerable<int> data) {
-            if (data == null)
-                return new IEnumerable<long>();
+        public IEnumerable<long> GetSquareSequence(IEnumerable<int> data) {           
             return data.Select(s => (long)s * (long)s);            
         }
 
@@ -118,9 +116,7 @@ namespace EnumerableTask {
         ///  { "a","b","c", null }, prefix=""   => { "a","b","c" }
         ///  { "a","b","c" }, prefix=null => exception
         /// </example>
-        public IEnumerable<string> GetPrefixItems(IEnumerable<string> data, string prefix) {
-            if (data == null)
-                return new IEnumerable<string>();
+        public IEnumerable<string> GetPrefixItems(IEnumerable<string> data, string prefix) {            
             return data.Where(w => w.Contains(prefix));
         }
 
@@ -133,9 +129,7 @@ namespace EnumerableTask {
         ///  { "a","b","c" , null } => { "b", null }
         ///  { "a" } => { }
         /// </example>
-        public IEnumerable<T> GetEvenItems<T>(IEnumerable<T> data) {
-            if (data == null)
-                return new IEnumerable<T>();
+        public IEnumerable<T> GetEvenItems<T>(IEnumerable<T> data) {           
             List<T> result = new List<T>();
             int counter = 1;
             foreach (var item in data)
@@ -160,9 +154,7 @@ namespace EnumerableTask {
         ///   { "a", "b", "c", null } => { "a", "b","b", "c","c","c", null,null,null,null }
         ///   { 1,2,3,4,5} => { 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 }
         /// </example>
-        public IEnumerable<T> PropagateItemsByPositionIndex<T>(IEnumerable<T> data) {
-            if (data == null)
-                return new IEnumerable<T>();
+        public IEnumerable<T> PropagateItemsByPositionIndex<T>(IEnumerable<T> data) {           
             int index = 1;
             List<T> result = new List<T>();
             foreach (var item in data)
@@ -188,9 +180,7 @@ namespace EnumerableTask {
         ///   { "", null } => { }
         ///   { } => { }
         /// </example>
-        public IEnumerable<char> GetUsedChars(IEnumerable<string> data) {
-            if (data == null)
-                return new IEnumerable<string>();
+        public IEnumerable<char> GetUsedChars(IEnumerable<string> data) {            
             List<char> result = new List<char>();
             foreach (var item in data)
             {
@@ -459,21 +449,29 @@ namespace EnumerableTask {
         ///    {(1/1/2010, 10)  , (4/4/2010, 10), (10/10/2010, 10) } => { 10, 10, 0, 10 }
         /// </example>
         public int[] GetQuarterSales(IEnumerable<Tuple<DateTime, int>> sales) {
-            int[] result = new int[4] ( 0, 0, 0, 0 );
-            foreach (var item in sales)
-            {
-                switch (item.Item1.Month)
-                {
-                    1:
-                    2:
-
-                    
-                    default:
-                        break;
-                }
-
-            }
-            return result;
+            //int[] result = new int[4](0, 0, 0, 0);
+            //foreach (var item in sales)
+            //{
+            //    switch (item.Item1.Month)
+            //    {
+            //        case <= 3:
+            //        result[0] += 1;
+            //            break;
+            //        case <= 6:
+            //            result[1] += 1;
+            //            break;
+            //        case <= 9:
+            //            result[2] += 1;
+            //            break;
+            //        case <= 12:
+            //            result[3] += 1;
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
+            //return result;
+            throw new NotImplementedException();
         }
 
 
@@ -489,7 +487,7 @@ namespace EnumerableTask {
         ///  {"c","cc","b","bb","a,"aa"} => {"a","b","c","aa","bb","cc"}
         /// </example>
         public IEnumerable<string> SortStringsByLengthAndAlphabet(IEnumerable<string> data) {
-            
+            //return data.OrderBy()
         
             // TODO : Implement SortStringsByLengthAndAlphabet
             throw new NotImplementedException();
@@ -506,8 +504,24 @@ namespace EnumerableTask {
         ///   {"a","b","c","9876543210"} => {}
         /// </example>
         public IEnumerable<char> GetMissingDigits(IEnumerable<string> data) {
-            // TODO : Implement GetMissingDigits
-            throw new NotImplementedException();
+            Dictionary<int, bool> result = new Dictionary<int, bool>();
+            for (int i = 0; i < 10; i++)
+            {
+                result.Add(i, false);
+            }
+            int buffer;
+            foreach (var item in data)
+            {
+                foreach (var charItem in item)
+                {
+                    if (int.TryParse(charItem.ToString(),out buffer))
+                    {
+                        if (result.ContainsKey(buffer))
+                            result.Remove(buffer);
+                    }
+                }
+            }
+            return (IEnumerable<char>)result.Select(s => s.Key);            
         }
 
 
@@ -542,8 +556,20 @@ namespace EnumerableTask {
         ///  { }, {"apple", "bananas" } => { }
         /// </example>
         public IEnumerable<string> CombineNumbersAndFruits(IEnumerable<string> numbers, IEnumerable<string> fruits) {
-            // TODO : Implement CombinesNumbersAndFruits
-            throw new NotImplementedException();
+            List<string> result = new List<string>();
+            if (numbers == null || fruits == null)
+                return result;
+            Queue<string> numbersQueue = new Queue<string>(numbers);
+            Queue<string> fruitsQueue = new Queue<string>(fruits);
+            while (numbersQueue.Count() != 0 && fruitsQueue.Count() != 0)
+            {
+                result.Add(numbersQueue.Peek() + " " + fruitsQueue.Peek());
+                if (numbersQueue.Count() > 0)
+                    numbersQueue.Dequeue();
+                if (fruitsQueue.Count() > 0)
+                    fruitsQueue.Dequeue();
+            }
+            return result;            
         }
 
 
@@ -559,8 +585,12 @@ namespace EnumerableTask {
         ///   {"ab","ba","aabb","baba"} => {"a","b"}
         /// </example>
         public IEnumerable<char> GetCommonChars(IEnumerable<string> data) {
-            // TODO : Implement GetCommonChars
-            throw new NotImplementedException();
+            HashSet<char> result = new HashSet<char>(data.ToArray().First());            
+            foreach (var item in data)
+            {
+                result = (HashSet<char>)result.Intersect(item.ToCharArray().ToList());
+            }
+            return result.ToList();            
         }
 
         /// <summary> Calculates sum of all integers from object array </summary>
@@ -575,8 +605,13 @@ namespace EnumerableTask {
         ///    { } => 0
         /// </example>
         public int GetSumOfAllInts(object[] data) {
-            // TODO : Implement GetSumOfAllInts
-            throw new NotImplementedException();
+            int result = 0, buffer;
+            foreach (var item in data)
+            {
+                if (int.TryParse(item.ToString(), out buffer))
+                    result += buffer;
+            }
+            return result;
         }
 
 
@@ -592,7 +627,11 @@ namespace EnumerableTask {
         ///   { } => { }
         /// </example>
         public IEnumerable<string> GetStringsOnly(object[] data) {
-            // TODO : Implement GetStringsOnly
+            //List<string> result = new List<string>();
+            //foreach (var item in data)
+            //{
+            //    if (item.GetType() == )
+            //}
             throw new NotImplementedException();
         }
 
@@ -610,8 +649,14 @@ namespace EnumerableTask {
         ///   { } => 0
         /// </example>
         public int GetTotalStringsLength(IEnumerable<string> data) {
-            // TODO : Implement GetTotalStringsLength
-            throw new NotImplementedException();
+            if (data == null)
+                return 0;
+            int result = 0;
+            foreach (var item in data)
+            {
+                result += item.Length;
+            }
+            return result;
         }
 
         /// <summary> Determines whether sequence has null elements</summary>
@@ -627,8 +672,14 @@ namespace EnumerableTask {
         ///   { } => false
         /// </example>
         public bool IsSequenceHasNulls(IEnumerable<string> data) {
-            // TODO : Implement IsSequenceHasNulls
-            throw new NotImplementedException();
+            if (data == null)
+                return false;
+            foreach (var item in data)
+            {
+                if (item == null)
+                    return true;
+            }
+            return false;
         }
 
         /// <summary> Determines whether all strings in sequence are uppercase</summary>
@@ -643,8 +694,17 @@ namespace EnumerableTask {
         ///   { } => false
         /// </example>
         public bool IsAllStringsAreUppercase(IEnumerable<string> data) {
-            // TODO : Implement IsAllStringsAreUppercase
-            throw new NotImplementedException();
+            foreach (var item in data)
+            {
+                foreach (var charItem in item)
+                {
+                    if (char.IsUpper(charItem))
+                        continue;
+                    else
+                        return false;
+                }
+            }
+            return true;
         }
 
         /// <summary> Finds first subsequence of negative integers </summary>
@@ -661,8 +721,19 @@ namespace EnumerableTask {
         ///    { } => { }
         /// </example>
         public IEnumerable<int> GetFirstNegativeSubsequence(IEnumerable<int> data) {
-            // TODO : Implement GetFirstNegativeSubsequence
-            throw new NotImplementedException();
+            List<int> result = new List<int>();
+            bool negativeTrigger = false;
+            foreach (var item in data)
+            {
+                if (item < 0)
+                {
+                    result.Add(item);
+                    negativeTrigger = true;
+                }
+                if (item >= 0 && negativeTrigger)
+                    return result;                   
+            }
+            return result;
         }
 
 
@@ -680,10 +751,12 @@ namespace EnumerableTask {
         /// { 3,2,1 } , { 1.0, 2.0, 3.0 } => false
         /// { -10 } => { -10.0 } => true
         /// </example>
-        public bool AreNumericListsEqual(IEnumerable<int> integers, IEnumerable<double> doubles) {
+        public bool AreNumericListsEqual(IEnumerable<int> integers, IEnumerable<double> doubles) {            
+            
             // TODO : Implement AreNumericListsEqual
             throw new NotImplementedException();
         }
+        
 
         /// <summary>
         /// Finds the next after specified version from the list 
