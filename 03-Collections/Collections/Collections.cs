@@ -29,8 +29,25 @@ namespace Collections.Tasks {
         ///   12 => { 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144 }
         /// </example>
         public static IEnumerable<int> GetFibonacciSequence(int count) {
-            // TODO : Implement Fibonacci sequence generator
-            throw new NotImplementedException();
+            if (count <= 0)
+                throw new ArgumentException();
+
+            int[] result = new int[count];
+            result[0] = 1;
+
+            if (count == 1)
+                return result;
+
+            result[1] = 1;
+
+            if (count == 2)
+                return result;
+
+            for (int i = 2; i < count; i++)
+            {
+                result[i] = result[i - 1] + result[i - 2];
+            }
+            return result;
         }
 
         /// <summary>
@@ -46,9 +63,16 @@ namespace Collections.Tasks {
         ///   {"TextReader","is","the","abstract","base","class","of","StreamReader","and","StringReader","which",...}
         /// </example>
         public static IEnumerable<string> Tokenize(TextReader reader) {
+            if (reader == null)
+                throw new ArgumentNullException();
             char[] delimeters = new[] { ',', ' ', '.', '\t', '\n' };
-            // TODO : Implement the tokenizer
-            throw new NotImplementedException();
+            string inputLine = null;
+            List<string> result = new List<string>();
+            while (reader != null)
+            {
+                result.AddRange(inputLine.Split(delimeters));
+            }
+            return result;
         }
 
 
@@ -74,10 +98,30 @@ namespace Collections.Tasks {
         ///                   
         ///    result = { 1, 2, 3, 4, 5, 6, 7, 8 } 
         /// </example>
-        public static IEnumerable<T> DepthTraversalTree<T>(ITreeNode<T> root) {
+        public static IEnumerable<T> DepthTraversalTree<T>(ITreeNode<T> root) 
+        {
             // TODO : Implement the tree depth traversal algorithm
-            throw new NotImplementedException(); 
+            List<T> result = new List<T>();
+            RecurseTraverse(root);
+
+            void RecurseTraverse(ITreeNode<T> node)
+            {
+                result.Add(node.Data);
+                if (node.Children != null)
+                {
+                    foreach (var item in node.Children)
+                    {
+                        RecurseTraverse(item);
+                    }
+                }
+            }
+            return result;
         }
+    
+
+
+
+        
 
         /// <summary>
         ///   Traverses a tree using the width-first strategy
@@ -102,7 +146,19 @@ namespace Collections.Tasks {
         /// </example>
         public static IEnumerable<T> WidthTraversalTree<T>(ITreeNode<T> root) {
             // TODO : Implement the tree width traversal algorithm
-            throw new NotImplementedException();
+            Queue<ITreeNode<T>> mainList = new Queue<ITreeNode<T>>();
+            List<T> result = new List<T>();
+            do
+            {
+                result.Add(mainList.Peek().Data);
+                foreach (var item in mainList.Peek().Children)
+                {
+                    mainList.Enqueue(item);
+                }
+                mainList.Dequeue();
+            } while (mainList.Count != 0);
+
+            return result;
         }
 
 
@@ -126,35 +182,40 @@ namespace Collections.Tasks {
         /// </example>
         public static IEnumerable<T[]> GenerateAllPermutations<T>(T[] source, int count) {
             // TODO : Implement GenerateAllPermutations method
-            throw new NotImplementedException();
+            //if (count < 0 || count > source.Length)
+            throw new ArgumentException();
+
+
+
+
         }
 
     }
 
-    public static class DictionaryExtentions {
+        public static class DictionaryExtentions {
         
-        /// <summary>
-        ///    Gets a value from the dictionary cache or build new value
-        /// </summary>
-        /// <typeparam name="TKey">TKey</typeparam>
-        /// <typeparam name="TValue">TValue</typeparam>
-        /// <param name="dictionary">source dictionary</param>
-        /// <param name="key">key</param>
-        /// <param name="builder">builder function to build new value if key does not exist</param>
-        /// <returns>
-        ///   Returns a value assosiated with the specified key from the dictionary cache. 
-        ///   If key does not exist than builds a new value using specifyed builder, puts the result into the cache 
-        ///   and returns the result.
-        /// </returns>
-        /// <example>
-        ///   IDictionary<int, Person> cache = new SortedDictionary<int, Person>();
-        ///   Person value = cache.GetOrBuildValue(10, ()=>LoadPersonById(10) );  // should return a loaded Person and put it into the cache
-        ///   Person cached = cache.GetOrBuildValue(10, ()=>LoadPersonById(10) );  // should get a Person from the cache
-        /// </example>
-        public static TValue GetOrBuildValue<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TValue> builder) {
-            // TODO : Implement GetOrBuildValue method for cache
-            throw new NotImplementedException();
-        }
+            /// <summary>
+            ///    Gets a value from the dictionary cache or build new value
+            /// </summary>
+            /// <typeparam name="TKey">TKey</typeparam>
+            /// <typeparam name="TValue">TValue</typeparam>
+            /// <param name="dictionary">source dictionary</param>
+            /// <param name="key">key</param>
+            /// <param name="builder">builder function to build new value if key does not exist</param>
+            /// <returns>
+            ///   Returns a value assosiated with the specified key from the dictionary cache. 
+            ///   If key does not exist than builds a new value using specifyed builder, puts the result into the cache 
+            ///   and returns the result.
+            /// </returns>
+            /// <example>
+            ///   IDictionary<int, Person> cache = new SortedDictionary<int, Person>();
+            ///   Person value = cache.GetOrBuildValue(10, ()=>LoadPersonById(10) );  // should return a loaded Person and put it into the cache
+            ///   Person cached = cache.GetOrBuildValue(10, ()=>LoadPersonById(10) );  // should get a Person from the cache
+            /// </example>
+            public static TValue GetOrBuildValue<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TValue> builder) {
+                // TODO : Implement GetOrBuildValue method for cache
+                throw new NotImplementedException();
+            }
 
+        }
     }
-}
