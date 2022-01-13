@@ -751,10 +751,17 @@ namespace EnumerableTask {
         /// { 3,2,1 } , { 1.0, 2.0, 3.0 } => false
         /// { -10 } => { -10.0 } => true
         /// </example>
-        public bool AreNumericListsEqual(IEnumerable<int> integers, IEnumerable<double> doubles) {            
-            
-            // TODO : Implement AreNumericListsEqual
-            throw new NotImplementedException();
+        public bool AreNumericListsEqual(IEnumerable<int> integers, IEnumerable<double> doubles) {
+            Queue<int> intQueue = new Queue<int>(integers);
+            Queue<double> doubleQueue = new Queue<double>(doubles);
+            for (int i = 0; i < intQueue.Count(); i++)
+            {
+                if (doubleQueue.Dequeue() % intQueue.Dequeue() == 0)
+                    continue;
+                else
+                    return false;
+            }
+            return true;
         }
         
 
@@ -772,9 +779,18 @@ namespace EnumerableTask {
         ///    { "1.1", "1.2", "1.5", "2.0" }, "1.4" => null
         ///    { "1.1", "1.2", "1.5", "2.0" }, "2.0" => null
         /// </example>
-        public string GetNextVersionFromList(IEnumerable<string> versions, string currentVersion) {
-            // TODO : Implement GetNextVersionFromList
-            throw new NotImplementedException();
+        public string GetNextVersionFromList(IEnumerable<string> versions, string currentVersion)
+        {
+            bool elementFinded = false;
+            foreach (var item in versions)
+            {
+                if (elementFinded)
+                    return item;
+
+                if (item == currentVersion)
+                    elementFinded = true;
+            }
+            return null;
         }
 
         /// <summary>
@@ -791,8 +807,14 @@ namespace EnumerableTask {
         ///   { 1, 1, 1 } + { -1, -1, -1 } => { 0, 0, 0 }
         /// </example>
         public IEnumerable<int> GetSumOfVectors(IEnumerable<int> vector1, IEnumerable<int> vector2) {
-            // TODO : Implement GetSumOfVectors
-            throw new NotImplementedException();
+            Queue<int> vector1Queue = new Queue<int>(vector1);
+            Queue<int> vector2Queue = new Queue<int>(vector2);
+            List<int> result = new List<int>();
+            for (int i = 0; i < vector1.Count(); i++)
+            {                
+                result.Add(vector1Queue.Dequeue() + vector2Queue.Dequeue());
+            }
+            return result;
         }
 
         /// <summary>
@@ -810,8 +832,14 @@ namespace EnumerableTask {
         ///   { 1, 1, 1 } * { 0, 0, 0 } => 1*0 + 1*0 +1*0 = 0
         /// </example>
         public int GetProductOfVectors(IEnumerable<int> vector1, IEnumerable<int> vector2) {
-            // TODO : Implement GetProductOfVectors
-            throw new NotImplementedException();
+            Queue<int> vector1Queue = new Queue<int>(vector1);
+            Queue<int> vector2Queue = new Queue<int>(vector2);
+            List<int> result = new List<int>();
+            for (int i = 0; i < vector1.Count(); i++)
+            {
+                result.Add(vector1Queue.Dequeue() * vector2Queue.Dequeue());
+            }
+            return result.Sum();
         }
 
 
@@ -830,8 +858,15 @@ namespace EnumerableTask {
         ///  { }, {"Alice"} => { }
         /// </example>
         public IEnumerable<string> GetAllPairs(IEnumerable<string> boys, IEnumerable<string> girls) {
-            // TODO : Implement GetAllPairs
-            throw new NotImplementedException();
+            List<string> result = new List<string>();
+            foreach (var b in boys)
+            {
+                foreach (var g in girls)
+                {
+                    result.Add(b + "+" + g);
+                }
+            }
+            return result;
         }
 
 
@@ -849,8 +884,16 @@ namespace EnumerableTask {
         ///  { } => 0.0
         /// </example>
         public double GetAverageOfDoubleValues(IEnumerable<object> data) {
-            // TODO : Implement GetAverageOfDoubleValues
-            throw new NotImplementedException();
+            List<double> result = new List<double>();
+            double buffer;
+            foreach (var item in data)
+            {
+                if (double.TryParse(item.ToString(), out buffer))
+                    result.Add(buffer);
+            }
+            if (result.Count() == 0)
+                return 0.0;
+            return result.Average();
         }
 
     }
