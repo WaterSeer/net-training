@@ -54,6 +54,8 @@ namespace AsyncIO
         {
             // TODO : Implement GetMD5Async
             throw new NotImplementedException();
+
+            var hash = MD5.Create(resource.ToString());
         }
 
     }
