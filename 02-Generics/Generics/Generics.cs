@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Linq;
+using System.ComponentModel;
+using System.Linq;
 
 namespace Task.Generics {
 
@@ -23,8 +27,7 @@ namespace Task.Generics {
 		///   { new TimeSpan(1, 0, 0), new TimeSpan(0, 0, 30) } => "01:00:00,00:00:30",
 		/// </example>
 		public static string ConvertToString<T>(this IEnumerable<T> list) {
-			// TODO : Implement ConvertToString<T>
-			throw new NotImplementedException();
+            return string.Join<T>(ListSeparator.ToString(), list);	
 		}
 
 		/// <summary>
@@ -46,9 +49,10 @@ namespace Task.Generics {
 		public static IEnumerable<T> ConvertToList<T>(this string list) {
 			// TODO : Implement ConvertToList<T>
 			// HINT : Use TypeConverter.ConvertFromString method to parse string value
-			throw new NotImplementedException();
+			TypeConverter type = new TypeConverter();
+			var a  = list.Split(ListSeparator).Select(s => type.ConvertTo(s, typeof(T))).Select( s => (T)s);
+			return a;
 		}
-
 	}
 
 	public static class ArrayExtentions {
@@ -61,8 +65,9 @@ namespace Task.Generics {
 		/// <param name="index1">first index</param>
 		/// <param name="index2">second index</param>
 		public static void SwapArrayElements<T>(this T[] array, int index1, int index2) {
-			// TODO : Implement SwapArrayElements<T>
-			throw new NotImplementedException();
+			T buffer = array[index2];
+			array[index2] = array[index1];
+			array[index1] = buffer;			
 		}
 
 		/// <summary>
@@ -94,6 +99,7 @@ namespace Task.Generics {
 		public static void SortTupleArray<T1, T2, T3>(this Tuple<T1, T2, T3>[] array, int sortedColumn, bool ascending) {
 			// TODO :SortTupleArray<T1, T2, T3>
 			// HINT : Add required constraints to generic types
+			
 		}
 
 	}
@@ -173,35 +179,35 @@ namespace Task.Generics {
 
 }
 
-using System.Xml;
+//using System.Xml;
  
-XmlDocument xDoc = new XmlDocument();
-xDoc.Load("D:\\users.xml");
-// получим корневой элемент
-XmlElement? xRoot = xDoc.DocumentElement;
-if (xRoot != null)
-{
-	// обход всех узлов в корневом элементе
-	foreach (XmlElement xnode in xRoot)
-	{
-		// получаем атрибут name
-		XmlNode? attr = xnode.Attributes.GetNamedItem("name");
-		Console.WriteLine(attr?.Value);
+//XmlDocument xDoc = new XmlDocument();
+//xDoc.Load("D:\\users.xml");
+//// получим корневой элемент
+//XmlElement? xRoot = xDoc.DocumentElement;
+//if (xRoot != null)
+//{
+//	// обход всех узлов в корневом элементе
+//	foreach (XmlElement xnode in xRoot)
+//	{
+//		// получаем атрибут name
+//		XmlNode? attr = xnode.Attributes.GetNamedItem("name");
+//		Console.WriteLine(attr?.Value);
 
-		// обходим все дочерние узлы элемента user
-		foreach (XmlNode childnode in xnode.ChildNodes)
-		{
-			// если узел - company
-			if (childnode.Name == "company")
-			{
-				Console.WriteLine($"Компания: {childnode.InnerText}");
-			}
-			// если узел age
-			if (childnode.Name == "age")
-			{
-				Console.WriteLine($"Возраст: {childnode.InnerText}");
-			}
-		}
-		Console.WriteLine();
-	}
-}
+//		// обходим все дочерние узлы элемента user
+//		foreach (XmlNode childnode in xnode.ChildNodes)
+//		{
+//			// если узел - company
+//			if (childnode.Name == "company")
+//			{
+//				Console.WriteLine($"Компания: {childnode.InnerText}");
+//			}
+//			// если узел age
+//			if (childnode.Name == "age")
+//			{
+//				Console.WriteLine($"Возраст: {childnode.InnerText}");
+//			}
+//		}
+//		Console.WriteLine();
+//	}
+//}

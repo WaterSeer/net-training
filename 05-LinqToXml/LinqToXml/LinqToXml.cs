@@ -17,40 +17,40 @@ namespace LinqToXml
         /// <returns>Xml representation (refer to CreateHierarchyResultFile.xml in Resources)</returns>
         public static string CreateHierarchy(string xmlRepresentation)
         {
-            if (xmlRepresentation == null)
-                return "";
-            XmlDocument xDoc = new XmlDocument();
-            xDoc.LoadXml(xmlRepresentation);
-            XmlElement xRoot = xDoc.DocumentElement;
-            if (xRoot != null)
-            {                
-                foreach (XmlElement xnode in xRoot)
-                {
-                    // получаем атрибут name
-                    XmlNode? attr = xnode.Attributes.GetNamedItem("Data");
-                    //Console.WriteLine(attr?.Value);
+            //if (xmlRepresentation == null)
+            //    return "";
+            //XmlDocument xDoc = new XmlDocument();
+            //xDoc.LoadXml(xmlRepresentation);
+            //XmlElement xRoot = xDoc.DocumentElement;
+            //if (xRoot != null)
+            //{                
+            //    foreach (XmlElement xnode in xRoot)
+            //    {
+            //        // получаем атрибут name
+            //        XmlNode? attr = xnode.Attributes.GetNamedItem("Data");
+            //        //Console.WriteLine(attr?.Value);
 
-                    // обходим все дочерние узлы элемента user
-                    foreach (XmlNode childnode in xnode.ChildNodes)
-                    {
-                        // если узел - company
-                        if (childnode.Name == "Category")
-                        {
-                            Console.WriteLine($"Компания: {childnode.InnerText}");
-                        }
-                        // если узел age
-                        if (childnode.Name == "Qantity")
-                        {
-                            Console.WriteLine($"Возраст: {childnode.InnerText}");
-                        }
-                        if (childnode.Name == "Price")
-                        {
-                            Console.WriteLine($"Возраст: {childnode.InnerText}");
-                        }
-                    }
-                    Console.WriteLine();
-                }
-            }
+            //        // обходим все дочерние узлы элемента user
+            //        foreach (XmlNode childnode in xnode.ChildNodes)
+            //        {
+            //            // если узел - company
+            //            if (childnode.Name == "Category")
+            //            {
+            //                Console.WriteLine($"Компания: {childnode.InnerText}");
+            //            }
+            //            // если узел age
+            //            if (childnode.Name == "Qantity")
+            //            {
+            //                Console.WriteLine($"Возраст: {childnode.InnerText}");
+            //            }
+            //            if (childnode.Name == "Price")
+            //            {
+            //                Console.WriteLine($"Возраст: {childnode.InnerText}");
+            //            }
+            //        }
+            //        Console.WriteLine();
+            //    }
+            //}
 
             return "";
 
